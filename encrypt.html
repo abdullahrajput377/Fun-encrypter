@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Password and etc Encrypter</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+GB+J:ital,wght@0,100..400;1,100..400&display=swap');
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #000;
+  color: #0f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  overflow-x: hidden;
+}
+
+h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+
+input, button {
+  margin: 8px 0;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #0f0;
+  background: #000;
+  color: #0f0;
+  width: 90%;
+  max-width: 320px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+button {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background: #0f0;
+  color: #000;
+  transform: scale(1.03);
+}
+
+p {
+  word-break: break-all;
+  text-align: center;
+  max-width: 90%;
+}
+
+.develop {
+  font-family: 'Playwrite GB J', sans-serif;
+  font-size: 1.5rem;
+  animation: blinker 5s infinite;
+  text-align: center;
+  margin-top: 0px;
+}
+
+@keyframes blinker {
+  0% { opacity: 1; color: #0f0; }
+  25% { opacity: 0.5; color: #00ffff; }
+  50% { opacity: 0.7; color: #00ff88; }
+  75% { opacity: 0.4; color: #00aaff; }
+  100% { opacity: 1; color: #0f0; }
+}
+
+/* Custom glowing cursor */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #00fff2;
+  border-radius: 50%;
+  pointer-events: none;
+  box-shadow: 0 0 20px #00fff2;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.4s ease, transform 0.05s ease;
+  z-index: 1000;
+  opacity: 0;
+}
+
+/* Responsive layout */
+@media (max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+  h2 {
+    font-size: 1.4rem;
+  }
+  input, button {
+    width: 100%;
+    font-size: 0.95rem;
+  }
+  .develop {
+    font-size: 1.2rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<h2>🔐 Base64 Encoder / Decoder</h2>
+
+<input type="text" id="encrypt" placeholder="Enter text to encrypt">
+<button id="encryptBtn">Encrypt</button>
+
+<input type="text" id="output" placeholder="Encrypted text" readonly>
+<button id="copyBtn">Copy</button>
+
+<input type="text" id="decode" placeholder="Enter text to decrypt">
+<button id="decodeBtn">Decrypt</button>
+
+<p id="decodedOutput"></p>
+<h3 class="develop">Developed by: Abdullah Rajput</h3>
+
+<!-- ✅ Cursor element -->
+<div class="cursor" id="cursor"></div>
+
+<script>
+const encryptInput = document.getElementById('encrypt');
+const encryptBtn = document.getElementById('encryptBtn');
+const outputField = document.getElementById('output');
+const copyBtn = document.getElementById('copyBtn');
+const decodeInput = document.getElementById('decode');
+const decodeBtn = document.getElementById('decodeBtn');
+const decodedOutput = document.getElementById('decodedOutput');
+const cursor = document.getElementById('cursor');
+
+// Encrypt
+encryptBtn.onclick = () => {
+  const text = encryptInput.value.trim();
+  if (!text) return alert("Enter text first!");
+  outputField.value = btoa(text);
+};
+
+// Copy
+copyBtn.onclick = () => {
+  if (!outputField.value) return alert("Nothing to copy!");
+  navigator.clipboard.writeText(outputField.value);
+  alert("Copied to clipboard!");
+};
+
+// Decode
+decodeBtn.onclick = () => {
+  const text = decodeInput.value.trim();
+  if (!text) return alert("Enter encrypted text!");
+  try {
+    decodedOutput.textContent = "🔓 Decoded: " + atob(text);
+  } catch (e) {
+    alert("Invalid Base64 text!");
+  }
+};
+
+// Custom glowing cursor logic
+let hideTimeout;
+
+document.addEventListener("mousemove", (e) => {
+  cursor.style.opacity = 1;
+  cursor.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+  clearTimeout(hideTimeout);
+  hideTimeout = setTimeout(() => {
+    cursor.style.opacity = 0;
+  }, 1500);
+});
+
+// Hide cursor completely on touch devices
+if ('ontouchstart' in window) {
+  cursor.style.display = 'none';
+}
+</script>
+</body>
+</html>
